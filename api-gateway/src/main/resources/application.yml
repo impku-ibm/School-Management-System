@@ -1,0 +1,59 @@
+server:
+   port: 8080
+
+spring:
+   application:
+      name: api-gateway
+   cloud:
+      gateway:
+         server:
+            webflux:
+               discovery:
+                  locator:
+                     enabled: true
+               routes:
+                  - id: auth-service
+
+                    uri: lb://auth-service
+                    predicates:
+                       - Path=/api/auth/**
+                  - id: user-service
+                    uri: lb://user-service
+                    predicates:
+                        - Path=/api/users/**
+                  -  id: student-service
+                     uri: lb://student-service
+                     predicates:
+                        - Path=/api/students/**
+                     filters:
+                       - StripPrefix=1
+                  -  id: subject-service
+                     uri: lb://subject-service
+                     predicates:
+                        - Path=/api/subjects/**
+                     filters:
+                       - StripPrefix=1
+                  -  id: teacher-service
+                     uri: lb://teacher-service
+                     predicates:
+                        - Path=/api/teachers/**
+                     filters:
+                       - StripPrefix=1
+                  -  id: class-service
+                     uri: lb://class-service
+                     predicates:
+                        - Path=/api/classes/**
+                     filters:
+                       - StripPrefix=1
+                  -  id: grade-service
+                     uri: lb://grade-service
+                     predicates:
+                        - Path=/api/grades/**
+                     filters:
+                       - StripPrefix=1
+
+
+eureka:
+   client:
+      service-url:
+         defaultZone: http://localhost:8761/eureka
